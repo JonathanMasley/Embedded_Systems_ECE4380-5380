@@ -1,6 +1,8 @@
 # TTU ECE 4380/5380: Embedded Systems Project
 
-This program compiles on Code Composer Studio 12.8.0 and is meant for the TI MSP432E401Y LaunchPad and utilizes the TI-BOOSTXL Audio board. It is baed on TI-RTOS.When compiled this program. The implementations featured in this program follow the homeworks outlined by Dr. Brian Nutter of Texas Tech University.
+This embedded systems project is implemented for the TI MSP432E401Y LaunchPad development board in conjunction with the TI-BOOSTXL Audio expansion board. The system is built on TI-RTOS and compiled using Code Composer Studio 12.8.0.
+
+The implementation follows a series of embedded systems design principles and requirements established by Dr. Brian Nutter at Texas Tech University's Department of Electrical and Computer Engineering. The project demonstrates real-time operating system concepts, hardware abstraction, peripheral interfacing, and networked embedded systems communication.
 
 ## Acknowledgements
 
@@ -54,9 +56,21 @@ This code was developed by Jonathan Masley under the guidance of Dr. Brian Nutte
 
  &nbsp;&nbsp;&nbsp;&nbsp;  [3 File Structure](#3-file-structure)
 
+ &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; [3.1 src\c_header](#31-srcc_header)
+
+ &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; [3.2 src\callbacks.c](#32-srccallbacksc)
+
+ &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; [3.3 src\infrastructure.c](#33-srcinfrastructurec)
+
+ &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; [3.4 src\main_tirtos.c](#34-srcmain_tirtosc)
+
  &nbsp;&nbsp;&nbsp;&nbsp; [4 Code Overview](#4-code-overview)
 
  &nbsp;&nbsp;&nbsp;&nbsp; [5 Troubleshooting](#5-troubleshooting)
+
+ &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; [5.1 `udpEcho.c` Redundancy](#51-udpechoc-redundancy)
+
+ &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp; [5.2 runVoice and Unused Semaphores](#52-runvoicechar-input-and-unused-semaphores)
 
  &nbsp;&nbsp;&nbsp;&nbsp; [6 Credits](#6-credits)
 
@@ -266,6 +280,27 @@ Finally, the program has an assortment of output help messages when users prompt
 
 ### 3.4 `src\main_tirtos.c`
 
+This file serves as the primary entry point for the TI-RTOS application and handles the initialization and launch of the real-time operating system. The key functions include:
+
+```c
+int main(void);
+void *mainThread(void *arg0);
+```
+
+The main thread performs the following critical operations:
+
+* Initializes the Board Support Package (BSP)
+* Configures system clocks and peripherals
+* Sets up the network stack for UDP communication
+* Launches the program initialization sequence
+* Starts the RTOS scheduler
+
+This file ties together the hardware initialization, driver setup, and task creation required for the program.
+
+### 3.5 `src\sinlut.c` and `src\sinlut.h`
+
+This file is where the sine function lookup table is stored for use in the `runSine()` function. This was separated largely for aesthetic purposes. Excel was used to generate the Sine lookup table. The table contains 257 entries to allow for proper operation of the sine function.
+
 ## 4 Code Overview
 
 The following coding conventions were used:
@@ -275,6 +310,20 @@ The following coding conventions were used:
 * SCREAMING_SNAKE_CASE for macro and constant definitions.
 * snake_case occasionally for special cases or in use by the canned examples.
 
+*A more detailed code overview has yet to be implemented.*
+
 ## 5 Troubleshooting
 
+Only one recorded issue with the program as of 07/28/2025. Please create an issue on the repository if you encounter one.
+
+### 5.1 `udpEcho.c` Redundancy
+
+There exists a redundant check for malformed -voice packets in udpEcho.c that is no longer possible as the buffer has been debugged. See the repository's issues for more details.
+
+### 5.2 `runVoice(char *input);` and Unused Semaphores
+
+There is one unnecessary gateSwi inside the `runVoice(char *input);` function that resides in `src\infrastructure.c` and there are two unused semaphores inside `Global.Bios`.
+
 ## 6 Credits
+
+As mentioned above, special thanks to Brian Nutter, PhD at Texas Tech University's Electrical and Computer Engineering Department. Much of the code is referenced firectly from Dr. Brian Nutter's code. Mark Danemiller's repository, [Embedded-ECE4380-MSP432](https://github.com/MarkDannemiller/Embedded-ECE4380-MSP432/tree/main) was also used as a resource during the development of this program. AI platforms including ChatGPT and ClaudeAI were used during the development of this program (though largely for debugging purposes). Additional sources are indicated in the `src\c_header.c` file.

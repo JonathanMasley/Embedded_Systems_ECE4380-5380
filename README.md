@@ -101,7 +101,7 @@ Add the following resources/instances to your "release.cfg" as outlined in secti
 
 ### 1.3.1 GateSwi Config
 
-Add 8 gateSwis to the projet by right clicking on "GateSwi" and clicking "New GateSwi...". Each GateSwi should be named "gateSwi0", "gateSwi1", "gateSwi2"... No additional configuration is necessary for GateSwis.
+Add 8 gateSwis to the project by right clicking on "GateSwi" and clicking "New GateSwi...". Each GateSwi should be named "gateSwi0", "gateSwi1", "gateSwi2"... No additional configuration is necessary for GateSwis.
 
 ### 1.3.2 HeapMem Config
 
